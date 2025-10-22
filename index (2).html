@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo 1 - Evaluación</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #764ba2;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+            font-weight: normal;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        #qrcode {
+            display: inline-block;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .question-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-text {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .option {
+            display: block;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .signature-section {
+            margin: 30px 0;
+        }
+
+        #signatureCanvas {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: crosshair;
+            display: block;
+            margin: 0 auto;
+            background: white;
+        }
+
+        .signature-buttons {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button.secondary {
+            background: #95a5a6;
+        }
+
+        button.secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .result-section {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .instructions {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            h2 {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Pantalla 1: QR y Bienvenida -->
+        <div id="welcomeScreen">
+            <h1>Módulo 1</h1>
+            <h2>Cotización, Consentimiento de Buró y Precalificación</h2>
+            
+            <div class="instructions">
+                <p><strong>📋 Instrucciones:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>La prueba consta de 10 preguntas aleatorias</li>
+                    <li>Cada pregunta vale 10 puntos</li>
+                    <li>Debes completar todos los campos y firmar</li>
+                    <li>Al finalizar recibirás tu calificación y un PDF</li>
+                </ul>
+            </div>
+
+            <div class="qr-section">
+                <p style="margin-bottom: 15px; color: #666;">Escanea el código QR para acceder desde tu móvil</p>
+                <div id="qrcode"></div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="startExam()">Iniciar Evaluación</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 2: Datos del Usuario -->
+        <div id="userDataScreen" class="hidden">
+            <h1>Datos del Evaluado</h1>
+            <h2>Por favor ingresa tu información</h2>
+
+            <div class="form-group">
+                <label for="userName">Nombre Completo *</label>
+                <input type="text" id="userName" placeholder="Ingresa tu nombre completo" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userDPI">DPI *</label>
+                <input type="text" id="userDPI" placeholder="Ingresa tu número de DPI" required>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="validateUserData()">Continuar</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 3: Examen -->
+        <div id="examScreen" class="hidden">
+            <h1>Evaluación - Módulo 1</h1>
+            
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+            </div>
+
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Pregunta <span id="currentQuestion">0</span> de 10
+            </p>
+
+            <div id="questionsContainer"></div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button onclick="submitAnswers()">Finalizar Evaluación</button>
+            </div>
+        </div>
+
+        <!-- Pantalla 4: Firma -->
+        <div id="signatureScreen" class="hidden">
+            <h1>Firma Digital</h1>
+            <h2>Por favor firma en el recuadro para validar tu evaluación</h2>
+
+            <div class="signature-section">
+                <canvas id="signatureCanvas" width="600" height="200"></canvas>
+                <div class="signature-buttons">
+                    <button class="secondary" onclick="clearSignature()">Limpiar Firma</button>
+                    <button onclick="submitSignature()">Confirmar y Calificar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 5: Resultados -->
+        <div id="resultScreen" class="hidden">
+            <h1>Resultados de la Evaluación</h1>
+            
+            <div class="result-section">
+                <p class="result-message">Tu puntuación es:</p>
+                <div class="score" id="finalScore">0</div>
+                <p id="resultMessage" style="font-size: 20px; margin-bottom: 20px;"></p>
+                
+                <div style="margin-top: 30px;">
+                    <p><strong>Nombre:</strong> <span id="resultName"></span></p>
+                    <p><strong>DPI:</strong> <span id="resultDPI"></span></p>
+                    <p><strong>Fecha:</strong> <span id="resultDate"></span></p>
+                    <p><strong>Respuestas Correctas:</strong> <span id="correctAnswers"></span>/10</p>
+                </div>
+
+                <button onclick="downloadPDF()" style="margin-top: 30px;">📄 Descargar Certificado PDF</button>
+                <button class="secondary" onclick="location.reload()" style="margin-top: 10px;">🔄 Nueva Evaluación</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos de preguntas
+        const allQuestions = [
+            {q: "¿Qué es una cotización?", options: ["a) Una factura de compra obligatoria", "b) Un documento que detalla el precio y condiciones de un producto o servicio", "c) Un contrato vinculante entre cliente y empresa", "d) Un registro contable de ventas realizadas"], answer: "b"},
+            {q: "¿Una cotización genera registro contable por sí sola?", options: ["a) Sí, siempre", "b) Solo si supera cierto monto", "c) No, es un documento informativo", "d) Solo cuando el cliente la acepta verbalmente"], answer: "c"},
+            {q: "¿Cuál es el segundo paso para ingresar una cotización en el sistema eLO?", options: ["a) Ingresar los datos del cliente", "b) Clic en el botón 'Cotizaciones'", "c) Clic en el botón 'Guardar'", "d) Clic en el botón 'Agregar Nuevo'"], answer: "d"},
+            {q: "¿Para qué sirve el plazo de validez en una cotización?", options: ["a) Para garantizar el precio indefinidamente", "b) Para establecer el tiempo de entrega del producto", "c) Después de este plazo el precio podría cambiar por factores como inflación o tipo de cambio", "d) Para cumplir con regulaciones fiscales"], answer: "c"},
+            {q: "¿Qué ocurre cuando una cotización es aceptada formalmente por el cliente?", options: ["a) Se elimina del sistema automáticamente", "b) Se convierte en la base de un contrato", "c) Se envía directamente a contabilidad", "d) Pierde su validez inmediatamente"], answer: "b"},
+            {q: "¿Con qué otro nombre se le conoce comúnmente a una cotización?", options: ["a) Factura comercial", "b) Orden de compra", "c) Presupuesto o presupuesto comercial", "d) Nota de crédito"], answer: "c"},
+            {q: "¿En qué formato se descarga la cotización al dar clic en 'Imprimir'?", options: ["a) Word (.docx)", "b) Excel (.xlsx)", "c) PDF", "d) Imagen (.jpg)"], answer: "c"},
+            {q: "¿Cuántos pasos hay para ingresar una cotización al sistema eLO?", options: ["a) 3 pasos", "b) 5 pasos", "c) 7 pasos", "d) 10 pasos"], answer: "b"},
+            {q: "¿Cuál NO es una mejora futura planeada para el módulo de cotizaciones?", options: ["a) Implementación de términos y condiciones", "b) Cotización automática en todos los plazos", "c) Conexión con redes sociales", "d) Todas las anteriores son mejoras planeadas"], answer: "c"},
+            {q: "¿Qué información incluye el PDF de la cotización impresa?", options: ["a) Solo el precio del producto", "b) Únicamente los datos del cliente", "c) Datos del cliente, producto cotizado e información de contacto del vendedor", "d) Solo la cuota mensual"], answer: "c"},
+            {q: "¿Qué es un consentimiento de verificación de buró?", options: ["a) Un documento que garantiza la aprobación del crédito", "b) Una autorización para consultar el historial crediticio", "c) Un contrato de préstamo", "d) Una solicitud de crédito formal"], answer: "b"},
+            {q: "¿El consentimiento de buró es obligatorio u opcional?", options: ["a) Obligatorio por ley", "b) Voluntario", "c) Obligatorio solo para montos altos", "d) Opcional solo en casos especiales"], answer: "b"},
+            {q: "¿Qué aplicación se utiliza para enviar el link de autorización al cliente?", options: ["a) Email", "b) SMS", "c) WhatsApp", "d) Telegram"], answer: "c"},
+            {q: "¿Cuál es el estado inicial de una autorización después de enviar el link?", options: ["a) Aprobado", "b) En proceso", "c) Pendiente", "d) Firmado"], answer: "c"},
+            {q: "¿Qué debe ingresar el cliente primero al abrir el link recibido?", options: ["a) Su correo electrónico", "b) Su contraseña", "c) Su número de identificación", "d) Su firma digital"], answer: "c"},
+            {q: "¿Se puede revocar un consentimiento de buró?", options: ["a) No, nunca", "b) Sí, en muchos casos escribiendo a la empresa", "c) Solo después de 5 años", "d) Únicamente con orden judicial"], answer: "b"},
+            {q: "¿Cuántos pasos debe seguir el cliente para firmar el consentimiento?", options: ["a) 3 pasos", "b) 4 pasos", "c) 6 pasos", "d) 8 pasos"], answer: "c"},
+            {q: "¿A qué estado cambia el consentimiento después de que el cliente lo firma?", options: ["a) Aprobado", "b) Completado", "c) Firmado", "d) Validado"], answer: "c"},
+            {q: "¿Qué botón se habilita una vez que el consentimiento está firmado?", options: ["a) Aprobar", "b) Precalificar", "c) Finalizar", "d) Imprimir"], answer: "b"},
+            {q: "¿Cuál NO es un propósito del consentimiento de buró?", options: ["a) Evaluar el historial crediticio", "b) Agilizar solicitudes", "c) Garantizar la aprobación del crédito", "d) Construir una base de datos"], answer: "c"},
+            {q: "¿Qué es una precalificación?", options: ["a) Una aprobación final de crédito", "b) Una evaluación preliminar e informal de capacidad financiera", "c) Un contrato de préstamo", "d) Una verificación de empleo"], answer: "b"},
+            {q: "¿La precalificación afecta el puntaje crediticio?", options: ["a) Sí, siempre lo reduce", "b) Solo si es rechazada", "c) Generalmente no lo afecta", "d) Lo aumenta automáticamente"], answer: "c"},
+            {q: "¿Desde qué pantalla se accede al botón 'Precalificar'?", options: ["a) Desde la pantalla de Cotizaciones", "b) Desde la pantalla de Autorización Buró", "c) Desde el menú principal", "d) Desde la pantalla de clientes"], answer: "b"},
+            {q: "¿Qué documento se debe subir durante el proceso de precalificación?", options: ["a) Recibo de agua", "b) Imagen del documento de identificación", "c) Constancia de trabajo", "d) Título de propiedad"], answer: "b"},
+            {q: "¿Cuál es el primer tipo de validación en la lógica de precalificación?", options: ["a) Score de buró", "b) Nivel de endeudamiento", "c) Validación K.O.", "d) Listas negras"], answer: "c"},
+            {q: "¿Cuántas listas negras se validan en el proceso?", options: ["a) 1 lista", "b) 2 listas", "c) 3 listas", "d) 4 listas (3 listas negras específicas + red de personas)"], answer: "d"},
+            {q: "¿Qué significa K.O. en el contexto de validación?", options: ["a) Knockout - criterios de eliminación automática", "b) Keep On - continuar proceso", "c) Key Operation - operación clave", "d) Knowledge Output - salida de conocimiento"], answer: "a"},
+            {q: "¿Cuál NO es un criterio de validación K.O.?", options: ["a) Edad", "b) Nacionalidad", "c) Nivel educativo", "d) Estado civil"], answer: "c"},
+            {q: "¿Cuántas mejoras futuras están planeadas para precalificación?", options: ["a) 1 mejora", "b) 2 mejoras", "c) 3 mejoras", "d) 5 mejoras"], answer: "c"},
+            {q: "¿Qué se debe revisar al finalizar una precalificación?", options: ["a) Solo el monto aprobado", "b) Tabla de cuotas máximas, montos máximos y el Resumen (Aplica/No Aplica)", "c) Únicamente el score crediticio", "d) Solo la fecha de vencimiento"], answer: "b"}
+        ];
+
+        // Variables globales
+        let selectedQuestions = [];
+        let userAnswers = [];
+        let userData = {};
+        let signatureData = null;
+        let canvas, ctx;
+        let isDrawing = false;
+
+        // Generar QR Code al cargar la página
+        window.onload = function() {
+            const currentURL = window.location.href;
+            new QRCode(document.getElementById("qrcode"), {
+                text: currentURL,
+                width: 200,
+                height: 200,
+                colorDark: "#667eea",
+                colorLight: "#ffffff",
+            });
+        };
+
+        // Función para iniciar el examen
+        function startExam() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('userDataScreen').classList.remove('hidden');
+        }
+
+        // Validar datos del usuario
+        function validateUserData() {
+            const name = document.getElementById('userName').value.trim();
+            const dpi = document.getElementById('userDPI').value.trim();
+
+            if (name === '' || dpi === '') {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            userData = {
+                name: name,
+                dpi: dpi,
+                date: new Date().toLocaleString('es-GT')
+            };
+
+            // Guardar en localStorage
+            localStorage.setItem('examUserData', JSON.stringify(userData));
+
+            // Generar preguntas aleatorias
+            generateRandomQuestions();
+
+            // Mostrar pantalla de examen
+            document.getElementById('userDataScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.remove('hidden');
+        }
+
+        // Generar 10 preguntas aleatorias
+        function generateRandomQuestions() {
+            const shuffled = [...allQuestions].sort(() => 0.5 - Math.random());
+            selectedQuestions = shuffled.slice(0, 10);
+            
+            // Guardar en localStorage
+            localStorage.setItem('examQuestions', JSON.stringify(selectedQuestions));
+
+            renderQuestions();
+        }
+
+        // Renderizar preguntas
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            selectedQuestions.forEach((question, index) => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                questionCard.innerHTML = `
+                    <div class="question-text">${index + 1}. ${question.q}</div>
+                    ${question.options.map((option, optIndex) => `
+                        <label class="option">
+                            <input type="radio" name="question${index}" value="${String.fromCharCode(97 + optIndex)}" onchange="updateProgress()">
+                            ${option}
+                        </label>
+                    `).join('')}
+                `;
+                container.appendChild(questionCard);
+            });
+        }
+
+        // Actualizar progreso
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 0; i < 10; i++) {
+                const selected = document.querySelector(`input[name="question${i}"]:checked`);
+                if (selected) answered++;
+            }
+
+            const progress = (answered / 10) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = answered;
+        }
+
+        // Enviar respuestas
+        function submitAnswers() {
+            userAnswers = [];
+            let allAnswered = true;
+
+            for (let i = 0; i < 10; i++) {
+                const selected = document.querySelector(`input[name="question${i}"]:checked`);
+                if (!selected) {
+                    allAnswered = false;
+                    break;
+                }
+                userAnswers.push(selected.value);
+            }
+
+            if (!allAnswered) {
+                alert('Por favor responde todas las preguntas antes de continuar');
+                return;
+            }
+
+            // Guardar respuestas
+            localStorage.setItem('examAnswers', JSON.stringify(userAnswers));
+
+            // Mostrar pantalla de firma
+            document.getElementById('examScreen').classList.add('hidden');
+            document.getElementById('signatureScreen').classList.remove('hidden');
+
+            // Inicializar canvas de firma
+            initSignatureCanvas();
+        }
+
+        // Inicializar canvas de firma
+        function initSignatureCanvas() {
+            canvas = document.getElementById('signatureCanvas');
+            ctx = canvas.getContext('2d');
+
+            // Ajustar para pantallas móviles
+            if (window.innerWidth < 600) {
+                canvas.width = window.innerWidth - 80;
+            }
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+
+            // Touch events para móviles
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', stopDrawing);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.strokeStyle = '#000';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function submitSignature() {
+            // Verificar que hay firma
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            let hasSignature = false;
+
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i + 3] > 0) {
+                    hasSignature = true;
+                    break;
+                }
+            }
+
+            if (!hasSignature) {
+                alert('Por favor firma antes de continuar');
+                return;
+            }
+
+            signatureData = canvas.toDataURL();
+            localStorage.setItem('examSignature', signatureData);
+
+            // Calcular resultados
+            calculateResults();
+        }
+
+        // Calcular resultados
+        function calculateResults() {
+            let correct = 0;
+            
+            for (let i = 0; i < 10; i++) {
+                if (userAnswers[i] === selectedQuestions[i].answer) {
+                    correct++;
+                }
+            }
+
+            const score = correct * 10;
+            
+            // Guardar resultados
+            const results = {
+                score: score,
+                correct: correct,
+                total: 10,
+                date: userData.date
+            };
+            localStorage.setItem('examResults', JSON.stringify(results));
+
+            // Mostrar resultados
+            showResults(score, correct);
+        }
+
+        // Mostrar resultados
+        function showResults(score, correct) {
+            document.getElementById('signatureScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+
+            document.getElementById('finalScore').textContent = score + ' pts';
+            document.getElementById('resultName').textContent = userData.name;
+            document.getElementById('resultDPI').textContent = userData.dpi;
+            document.getElementById('resultDate').textContent = userData.date;
+            document.getElementById('correctAnswers').textContent = correct;
+
+            let message = '';
+            if (score >= 90) {
+                message = '🎉 ¡Excelente! Dominas el tema';
+            } else if (score >= 70) {
+                message = '👍 ¡Muy bien! Buen conocimiento del tema';
+            } else if (score >= 60) {
+                message = '✅ Aprobado. Continúa estudiando';
+            } else {
+                message = '📚 Necesitas repasar el material';
+            }
+
+            document.getElementById('resultMessage').textContent = message;
+        }
+
+        // Descargar PDF
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Recuperar datos del localStorage
+            const userData = JSON.parse(localStorage.getItem('examUserData'));
+            const results = JSON.parse(localStorage.getItem('examResults'));
+            const signature = localStorage.getItem('examSignature');
+
+            // Encabezado
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 0, 210, 40, 'F');
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.text('CERTIFICADO DE EVALUACIÓN', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.text('Módulo 1: Cotización, Consentimiento de Buró y Precalificación', 105, 30, { align: 'center' });
+
+            // Información del evaluado
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(12);
+            doc.text('Datos del Evaluado:', 20, 55);
+            
+            doc.setFontSize(11);
+            doc.text(`Nombre: ${userData.name}`, 20, 65);
+            doc.text(`DPI: ${userData.dpi}`, 20, 72);
+            doc.text(`Fecha: ${userData.date}`, 20, 79);
+
+            // Resultados
+            doc.setFontSize(12);
+            doc.text('Resultados:', 20, 95);
+            
+            doc.setFontSize(11);
+            doc.text(`Preguntas Respondidas: ${results.total}`, 20, 105);
+            doc.text(`Respuestas Correctas: ${results.correct}`, 20, 112);
+            doc.text(`Respuestas Incorrectas: ${results.total - results.correct}`, 20, 119);
+
+            // Puntuación
+            doc.setFontSize(16);
+            doc.setTextColor(102, 126, 234);
+            doc.text(`PUNTUACIÓN FINAL: ${results.score} / 100`, 105, 140, { align: 'center' });
+
+            // Estado
+            doc.setFontSize(14);
+            if (results.score >= 60) {
+                doc.setTextColor(46, 204, 113);
+                doc.text('APROBADO', 105, 150, { align: 'center' });
+            } else {
+                doc.setTextColor(231, 76, 60);
+                doc.text('NO APROBADO', 105, 150, { align: 'center' });
+            }
+
+            // Firma
+            if (signature) {
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(11);
+                doc.text('Firma del Evaluado:', 20, 170);
+                doc.addImage(signature, 'PNG', 20, 175, 80, 27);
+            }
+
+            // Pie de página
+            doc.setFontSize(9);
+            doc.setTextColor(128, 128, 128);
+            doc.text('Este certificado es generado automáticamente por el sistema de evaluación', 105, 270, { align: 'center' });
+            doc.text('Documento válido con firma digital', 105, 276, { align: 'center' });
+
+            // Descargar
+            doc.save(`Certificado_${userData.name.replace(/ /g, '_')}_${Date.now()}.pdf`);
+        }
+    </script>
+</body>
+</html>
