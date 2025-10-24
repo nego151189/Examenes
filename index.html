@@ -226,14 +226,14 @@
     <div class="container">
         <!-- Pantalla 1: QR y Bienvenida -->
         <div id="welcomeScreen">
-            <h1>Módulo 1</h1>
-            <h2>Sistema eLO - Solicitud de Crédito y Asignación Automática</h2>
+            <h1>Módulo 3</h1>
+            <h2>Cambios Importantes en eLO</h2>
             
             <div class="instructions">
                 <p><strong>📋 Instrucciones:</strong></p>
                 <ul style="margin-left: 20px; margin-top: 10px;">
-                    <li>La prueba consta de 10 preguntas aleatorias sobre el sistema eLO</li>
-                    <li>Las preguntas abarcan temas como: proceso de solicitud, asignación automática, estados del ciclo, priorizaciones y más</li>
+                    <li>La prueba consta de 10 preguntas aleatorias sobre los cambios importantes en eLO</li>
+                    <li>Las preguntas abarcan: validaciones automáticas, listas negras, contactabilidad, análisis, automatización y beneficios</li>
                     <li>Cada pregunta vale 10 puntos</li>
                     <li>Debes completar todos los campos y firmar</li>
                     <li>Al finalizar recibirás tu calificación y un PDF detallado</li>
@@ -328,75 +328,54 @@
     <script>
         // Base de datos de preguntas
         const allQuestions = [
-            // Conceptos generales
-            {category: "Conceptos Generales", q: "¿Qué es una solicitud de crédito?", options: ["a) Un documento informal para pedir dinero", "b) Un formulario para solicitar productos bancarios", "c) Un documento formal para pedir un préstamo", "d) Un registro de pagos mensuales"], answer: "c"},
-            {category: "Conceptos Generales", q: "¿Qué información recopila una solicitud de crédito?", options: ["a) Solo datos personales", "b) Datos personales y financieros", "c) Solo ingresos", "d) Solo referencias"], answer: "b"},
-            {category: "Conceptos Generales", q: "¿Quién evalúa la solicitud de crédito?", options: ["a) El cliente", "b) El gerente", "c) El prestamista", "d) El departamento de marketing"], answer: "c"},
-            {category: "Conceptos Generales", q: "¿Qué busca determinar la evaluación del prestamista?", options: ["a) Nivel académico", "b) Riesgo crediticio", "c) Tiempo de residencia", "d) Capacidad legal"], answer: "b"},
-            {category: "Conceptos Generales", q: "¿Cuál es el primer paso del proceso en eLO?", options: ["a) Datos laborales", "b) Información personal", "c) Dirección", "d) Carga de documentos"], answer: "b"},
+            // Estructura de Mejoras
+            {category: "Estructura de Mejoras", q: "¿Cuál es una de las áreas principales de mejora en eLO?", options: ["a) Marketing digital", "b) Precalificación", "c) Recursos humanos", "d) Contabilidad"], answer: "b"},
+            {category: "Estructura de Mejoras", q: "¿Qué incluye la mejora en Solicitud de Crédito?", options: ["a) Eliminación de campos", "b) Campos adicionales de contactabilidad y referencias mejoradas", "c) Reducción de requisitos", "d) Automatización del pago"], answer: "b"},
+            {category: "Estructura de Mejoras", q: "¿Qué área tiene automatización de procesos y controles de calidad reforzados?", options: ["a) Ventas", "b) Precalificación", "c) Análisis", "d) Cobranza"], answer: "c"},
             
-            // Proceso en eLO
-            {category: "Proceso en eLO", q: "¿Qué paso del proceso incluye el lugar de residencia?", options: ["a) Datos laborales", "b) Dirección", "c) Referencias", "d) Financiamiento"], answer: "b"},
-            {category: "Proceso en eLO", q: "¿En qué paso se registran los ingresos del cliente?", options: ["a) Datos laborales", "b) Dirección", "c) Referencias", "d) Carga de documentos"], answer: "a"},
-            {category: "Proceso en eLO", q: "¿En qué etapa se define el monto solicitado?", options: ["a) Financiamiento", "b) Referencias", "c) Información personal", "d) Reproceso"], answer: "a"},
-            {category: "Proceso en eLO", q: "¿Cuál es el último paso del proceso de solicitud?", options: ["a) Referencias", "b) Financiamiento", "c) Carga de documentos", "d) Dirección"], answer: "c"},
-            {category: "Proceso en eLO", q: "¿Qué beneficio principal ofrece la asignación automática?", options: ["a) Más control manual", "b) Reducción de eficiencia", "c) Distribución automática de tareas", "d) Menor cobertura"], answer: "c"},
+            // Precalificación: Listas Negras
+            {category: "Precalificación: Listas Negras", q: "¿Cuántos grupos críticos de riesgo valida automáticamente el sistema en listas negras?", options: ["a) 1 grupo", "b) 2 grupos", "c) 3 grupos", "d) 4 grupos"], answer: "b"},
+            {category: "Precalificación: Listas Negras", q: "¿Qué tipo de sujetos son validados en las listas negras?", options: ["a) Solo clientes nuevos", "b) Sujetos ingresados por créditos en análisis y clientes con mala conducta de pago", "c) Empleados de la empresa", "d) Proveedores externos"], answer: "b"},
+            {category: "Precalificación: Listas Negras", q: "¿Cuándo ocurre la validación de listas negras?", options: ["a) Al final del proceso", "b) Después de la aprobación", "c) En tiempo real durante la precalificación", "d) Solo cuando lo solicita el analista"], answer: "c"},
+            {category: "Precalificación: Listas Negras", q: "¿Qué busca evitar la validación de listas negras?", options: ["a) Pérdida de datos", "b) Ingreso de solicitudes de alto riesgo", "c) Errores de sistema", "d) Duplicación de registros"], answer: "b"},
             
-            // Principios de la asignación automática
-            {category: "Principios de la Asignación Automática", q: "¿Qué característica principal tiene la optimización?", options: ["a) Menos trabajo", "b) Equilibrio de carga entre analistas", "c) Reducción de personal", "d) Aumento de horas laborales"], answer: "b"},
-            {category: "Principios de la Asignación Automática", q: "¿Qué busca la eficiencia?", options: ["a) Más papeleo", "b) Atención oportuna y consistente", "c) Menos seguimiento", "d) Más aprobaciones"], answer: "b"},
-            {category: "Principios de la Asignación Automática", q: "¿Qué elimina la automatización?", options: ["a) Asignación manual lenta", "b) Reportes automáticos", "c) Control de tiempos", "d) Tareas digitales"], answer: "a"},
-            {category: "Principios de la Asignación Automática", q: "¿Qué garantiza el sistema automatizado?", options: ["a) Asignación aleatoria", "b) Equidad en distribución", "c) Exclusión de analistas", "d) Procesos manuales"], answer: "b"},
-            {category: "Principios de la Asignación Automática", q: "¿Qué tipo de mejoras se implementaron en eLO?", options: ["a) Mejores gráficos", "b) Cambios visuales", "c) Mejoras funcionales significativas", "d) Eliminación de módulos"], answer: "c"},
+            // Validaciones en Precalificación
+            {category: "Validaciones en Precalificación", q: "¿Qué identifican las validaciones de clientes recurrentes?", options: ["a) Solo clientes nuevos", "b) Sujetos con créditos activos y clientes con cancelaciones previas", "c) Clientes VIP", "d) Empleados"], answer: "b"},
+            {category: "Validaciones en Precalificación", q: "¿Qué son los K.O. Automáticos?", options: ["a) Aprobaciones rápidas", "b) Validación instantánea de variables no aprobadas por política crediticia", "c) Eliminación de solicitudes", "d) Reportes automáticos"], answer: "b"},
+            {category: "Validaciones en Precalificación", q: "¿Para qué país está disponible la conexión con RENAP?", options: ["a) El Salvador", "b) Honduras", "c) Guatemala", "d) Nicaragua"], answer: "c"},
+            {category: "Validaciones en Precalificación", q: "¿Qué elimina la conexión con RENAP?", options: ["a) Requisitos de documentación", "b) Errores de digitación al verificar datos de identidad", "c) Tiempos de espera", "d) Costos operativos"], answer: "b"},
+            {category: "Validaciones en Precalificación", q: "¿Cómo es la integración con RENAP?", options: ["a) Manual", "b) Vía correo electrónico", "c) Por API", "d) Por teléfono"], answer: "c"},
             
-            // Cambios implementados
-            {category: "Cambios Implementados", q: "¿Cuál de estos NO es un nuevo estado del sistema?", options: ["a) Reasignado", "b) Aprobado", "c) Verificaciones finalizadas", "d) Ingresado"], answer: "d"},
-            {category: "Cambios Implementados", q: "¿Qué registra la grabación de tiempos?", options: ["a) Tiempos de conexión a internet", "b) Tiempos en cada acción", "c) Horas laborales totales", "d) Descansos"], answer: "b"},
-            {category: "Cambios Implementados", q: "¿Para qué sirve el módulo de priorizaciones?", options: ["a) Para ordenar solicitudes según importancia", "b) Para eliminar solicitudes duplicadas", "c) Para generar reportes", "d) Para aprobar créditos"], answer: "a"},
-            {category: "Cambios Implementados", q: "¿Qué mide la grabación de tiempos?", options: ["a) Productividad visual", "b) Eficiencia del proceso", "c) Nivel de riesgo", "d) Tiempo de descanso"], answer: "b"},
-            {category: "Cambios Implementados", q: "¿Cuál NO es un estado de disponibilidad?", options: ["a) Almuerzo", "b) Disponible", "c) Pendiente de aprobación", "d) Capacitación"], answer: "c"},
+            // Solicitud: Contactabilidad Mejorada
+            {category: "Solicitud: Contactabilidad Mejorada", q: "¿Cuántos campos de contacto adicionales están disponibles?", options: ["a) 2 campos", "b) 3 campos", "c) 4 campos", "d) 5 campos"], answer: "c"},
+            {category: "Solicitud: Contactabilidad Mejorada", q: "¿Qué se valida en los campos de teléfonos adicionales?", options: ["a) Que sean números internacionales", "b) Que sean del mismo operador", "c) El número propio del cliente", "d) Que sean números fijos"], answer: "c"},
+            {category: "Solicitud: Contactabilidad Mejorada", q: "¿Qué nuevo campo permite registrar preferencias del cliente?", options: ["a) Método de pago preferido", "b) Horario de contactabilidad", "c) Sucursal favorita", "d) Tipo de producto"], answer: "b"},
+            {category: "Solicitud: Contactabilidad Mejorada", q: "¿Para qué sirve el campo de comentarios en la solicitud?", options: ["a) Calificar al vendedor", "b) Registrar quejas", "c) Capturar cualquier requerimiento especial del cliente", "d) Evaluar el servicio"], answer: "c"},
             
-            // Estados del ciclo
-            {category: "Estados del Ciclo", q: "¿Qué significa el estado 'Ingresado'?", options: ["a) Solicitud aprobada", "b) Nueva solicitud en el sistema", "c) Solicitud eliminada", "d) Solicitud reprogramada"], answer: "b"},
-            {category: "Estados del Ciclo", q: "¿Qué indica el estado 'Reproceso'?", options: ["a) Que ya fue aprobado", "b) Que requiere análisis adicional", "c) Que fue cancelado", "d) Que se duplicó"], answer: "b"},
-            {category: "Estados del Ciclo", q: "¿Qué estado corresponde a una solicitud lista para evaluación?", options: ["a) Ingresado", "b) Reproceso", "c) Verificaciones finalizadas", "d) Devuelto"], answer: "c"},
-            {category: "Estados del Ciclo", q: "¿Qué estado representa una solicitud que cumple hora de revisión?", options: ["a) Reprogramado", "b) Rechazado", "c) Devuelto", "d) Confirmado"], answer: "a"},
-            {category: "Estados del Ciclo", q: "¿Cuál es un estado de finalización?", options: ["a) En revisión", "b) Rechazado", "c) Verificaciones finalizadas", "d) Reproceso"], answer: "b"},
+            // Nuevos Campos Críticos
+            {category: "Nuevos Campos Críticos", q: "¿Qué información del recibo de servicios se incluye ahora?", options: ["a) Monto a pagar", "b) Tipo y número de contador", "c) Fecha de vencimiento", "d) Nombre del proveedor"], answer: "b"},
+            {category: "Nuevos Campos Críticos", q: "¿En qué validación se utiliza el número de contador?", options: ["a) Solo verificación de domicilio", "b) Lista negra, coincidencias con solicitudes anteriores y verificación de domicilio", "c) Únicamente en análisis de crédito", "d) Solo para reportes"], answer: "b"},
+            {category: "Nuevos Campos Críticos", q: "¿Cuántas referencias personales son requeridas?", options: ["a) 1 referencia", "b) 2 referencias", "c) 3 referencias", "d) 4 referencias"], answer: "b"},
+            {category: "Nuevos Campos Críticos", q: "¿Cuántas referencias familiares son obligatorias?", options: ["a) 1 referencia", "b) 2 referencias", "c) 3 referencias", "d) No son obligatorias"], answer: "b"},
+            {category: "Nuevos Campos Críticos", q: "¿Qué es obligatorio especificar en las referencias?", options: ["a) Nivel educativo", "b) Ingresos mensuales", "c) Parentesco real", "d) Ocupación"], answer: "c"},
             
-            // Priorizaciones
-            {category: "Priorizaciones", q: "¿Quién avala la configuración del módulo de priorizaciones?", options: ["a) Gerencia de Tecnología", "b) Gerencia Comercial y de Créditos", "c) Departamento de Ventas", "d) Mesa de Ayuda"], answer: "b"},
-            {category: "Priorizaciones", q: "¿Qué representa el 'Nivel'?", options: ["a) Jerarquía de prioridad", "b) Tipo de cliente", "c) Orden cronológico", "d) Segmento de mercado"], answer: "a"},
-            {category: "Priorizaciones", q: "¿Cuál tiene la máxima prioridad?", options: ["a) Nivel 3", "b) Nivel 2", "c) Nivel 1", "d) Nivel 0"], answer: "c"},
-            {category: "Priorizaciones", q: "¿Qué es un Ítem dentro del módulo?", options: ["a) Variable usada dentro de un nivel", "b) Cliente registrado", "c) Analista disponible", "d) Tipo de crédito"], answer: "a"},
-            {category: "Priorizaciones", q: "¿Qué determina el orden de asignación?", options: ["a) Orden aleatorio", "b) Configuración interna", "c) Fecha de ingreso", "d) Estado del cliente"], answer: "b"},
+            // Análisis: Seguimiento y Control
+            {category: "Análisis: Seguimiento y Control", q: "¿Qué permite revisar el botón de Histórico de Solicitud?", options: ["a) Solo la fecha de ingreso", "b) Tracking completo y tiempos de gestión", "c) Únicamente documentos adjuntos", "d) Solo el nombre del analista"], answer: "b"},
+            {category: "Análisis: Seguimiento y Control", q: "¿Para qué sirven los Botones de Estado?", options: ["a) Para eliminar solicitudes", "b) Para coordinar verificaciones y establecer estados/subestados", "c) Para aprobar automáticamente", "d) Para generar reportes"], answer: "b"},
+            {category: "Análisis: Seguimiento y Control", q: "¿Qué controla la función de Confirmación Pendiente?", options: ["a) Pagos atrasados", "b) Documentos faltantes", "c) Procesos ajenos al análisis principal del crédito", "d) Errores del sistema"], answer: "c"},
             
-            // Ejemplo práctico
-            {category: "Ejemplo Práctico", q: "¿Qué tipo de cliente tiene nivel 1?", options: ["a) Estándar", "b) Nuevo", "c) Premium", "d) Rechazado"], answer: "c"},
-            {category: "Ejemplo Práctico", q: "En el nivel 2, ¿qué tipo de montos se priorizan primero?", options: ["a) Menores a $50,000", "b) Superiores a $50,000", "c) Exactos a $50,000", "d) Iguales para todos"], answer: "b"},
-            {category: "Ejemplo Práctico", q: "En el nivel 3, ¿qué ítem tiene menor prioridad?", options: ["a) Con referencias bancarias", "b) Sin historial crediticio", "c) Con historial", "d) Antiguos clientes"], answer: "b"},
-            {category: "Ejemplo Práctico", q: "¿Qué orden se asigna a las renovaciones de clientes premium?", options: ["a) 1", "b) 2", "c) 3", "d) Ninguno"], answer: "a"},
-            {category: "Ejemplo Práctico", q: "¿Qué representa el orden 2 en el nivel 1?", options: ["a) Nuevas solicitudes", "b) Rechazadas", "c) Reprocesos", "d) Aprobadas"], answer: "a"},
+            // Automatización Inteligente
+            {category: "Automatización Inteligente", q: "¿Cómo distribuye solicitudes la Asignación Automática?", options: ["a) Aleatoriamente", "b) Por orden de llegada", "c) De forma inteligente para optimizar la operación", "d) Manualmente"], answer: "c"},
+            {category: "Automatización Inteligente", q: "¿Qué previene la Validación de Llamadas?", options: ["a) Llamadas no autorizadas", "b) Subir la misma confirmación telefónica en campos distintos", "c) Números duplicados", "d) Horarios incorrectos"], answer: "b"},
+            {category: "Automatización Inteligente", q: "¿Qué confirma la revisión de Procesos Completados?", options: ["a) Que el cliente pagó", "b) Que todos los documentos están firmados", "c) Que la solicitud ha sido trabajada en su totalidad", "d) Que no hay errores"], answer: "c"},
             
-            // Lógica de asignación
-            {category: "Lógica de Asignación", q: "¿Qué principio garantiza que el proceso no quede incompleto?", options: ["a) Priorización", "b) Inicio y fin definidos", "c) Disponibilidad", "d) Grabación de tiempos"], answer: "b"},
-            {category: "Lógica de Asignación", q: "¿Qué se garantiza con la priorización estratégica?", options: ["a) Aleatoriedad", "b) Que las críticas se atiendan primero", "c) Que todas se atiendan igual", "d) Que no haya prioridades"], answer: "b"},
-            {category: "Lógica de Asignación", q: "¿Qué factor evita cuellos de botella?", options: ["a) Asignación aleatoria", "b) Asignación a analistas disponibles", "c) Eliminar analistas", "d) Reproceso continuo"], answer: "b"},
-            {category: "Lógica de Asignación", q: "¿Qué se asegura con la disponibilidad del analista?", options: ["a) Que el cliente espere más", "b) Que la carga se distribuya equitativamente", "c) Que haya reprocesos", "d) Que se dupliquen solicitudes"], answer: "b"},
-            {category: "Lógica de Asignación", q: "¿Qué pilar garantiza seguimiento integral?", options: ["a) Inicio y fin definidos", "b) Priorización", "c) Disponibilidad", "d) Grabación"], answer: "a"},
+            // Controles Adicionales en Análisis
+            {category: "Controles Adicionales", q: "¿Cuándo se captura el Segundo Teléfono Confirmado?", options: ["a) Al inicio de la solicitud", "b) Cuando el solicitante indica otro número durante la llamada de confirmación", "c) Solo si el primer número falla", "d) Al finalizar el proceso"], answer: "b"},
+            {category: "Controles Adicionales", q: "¿En qué campos críticos busca coincidencias el sistema?", options: ["a) Solo en el nombre", "b) Solo en la dirección", "c) En teléfono, identificación, NIT o número de contador", "d) Solo en referencias"], answer: "c"},
             
-            // Beneficios del sistema
-            {category: "Beneficios del Sistema", q: "¿Qué significa cobertura total?", options: ["a) Solo algunas solicitudes se procesan", "b) Todas las solicitudes son procesadas", "c) Solo las urgentes", "d) Solo las digitales"], answer: "b"},
-            {category: "Beneficios del Sistema", q: "¿Qué efecto tiene sobre los tiempos de análisis?", options: ["a) Aumentan", "b) Disminuyen", "c) Se duplican", "d) No cambian"], answer: "b"},
-            {category: "Beneficios del Sistema", q: "¿Qué cantidad de errores manuales busca el sistema?", options: ["a) 5%", "b) 1%", "c) 0%", "d) 10%"], answer: "c"},
-            {category: "Beneficios del Sistema", q: "¿Qué se elimina con la automatización?", options: ["a) Asignaciones duplicadas", "b) Prioridades", "c) Estados finales", "d) Reportes"], answer: "a"},
-            {category: "Beneficios del Sistema", q: "¿Qué garantiza el sistema eLO?", options: ["a) Eficiencia y transparencia", "b) Mayor carga manual", "c) Pérdida de seguimiento", "d) Asignación lenta"], answer: "a"},
-            
-            // Conclusiones
-            {category: "Conclusiones", q: "¿Qué tipo de trabajo se distribuye equitativamente?", options: ["a) Comercial", "b) Análisis de solicitudes", "c) Logístico", "d) Publicitario"], answer: "b"},
-            {category: "Conclusiones", q: "¿Qué aspecto NO es un beneficio directo del sistema?", options: ["a) Equidad", "b) Transparencia", "c) Reducción de tiempos", "d) Pérdida de trazabilidad"], answer: "d"},
-            {category: "Conclusiones", q: "¿Qué mejora principal aporta la automatización al equipo?", options: ["a) Control manual", "b) Optimización del tiempo", "c) Aumento de errores", "d) Reprocesos innecesarios"], answer: "b"},
-            {category: "Conclusiones", q: "¿Cómo afecta el sistema al cliente final?", options: ["a) Más demoras", "b) Atención más oportuna", "c) Menos transparencia", "d) Menor cobertura"], answer: "b"},
-            {category: "Conclusiones", q: "¿Qué representa globalmente el sistema eLO?", options: ["a) Un sistema manual", "b) Un proceso ineficiente", "c) Una transformación digital hacia eficiencia y equidad", "d) Un método temporal"], answer: "c"}
+            // Beneficios Clave
+            {category: "Beneficios Clave", q: "¿Qué beneficio proporciona la automatización de tareas repetitivas?", options: ["a) Reducción de personal", "b) Mayor eficiencia", "c) Menor calidad", "d) Más errores"], answer: "b"},
+            {category: "Beneficios Clave", q: "¿Cuál es el objetivo principal de las nuevas funcionalidades en eLO?", options: ["a) Aumentar costos operativos", "b) Complicar los procesos", "c) Mejorar eficiencia, precisión, reducir riesgo y tener trazabilidad total", "d) Eliminar controles"], answer: "c"}
         ];
 
         // Variables globales
@@ -686,7 +665,7 @@
             doc.text('CERTIFICADO DE EVALUACIÓN', 105, 18, { align: 'center' });
             
             doc.setFontSize(14);
-            doc.text('Módulo 1: Sistema eLO - Solicitud de Crédito y Asignación Automática', 105, 28, { align: 'center' });
+            doc.text('Módulo 3: Cambios Importantes en eLO', 105, 28, { align: 'center' });
             
             doc.setFontSize(11);
             doc.text('Departamento de Créditos Avanta', 105, 37, { align: 'center' });
